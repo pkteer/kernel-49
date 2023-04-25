@@ -173,6 +173,7 @@ config RALINK_MT7621
 	select HW_HAS_PCI
 	select SWAP_IO_SPACE
 	select BOOT_ELF32
+	select BOOT_RAW
 	select SYS_HAS_CPU_MIPS32_R1
 	select SYS_HAS_CPU_MIPS32_R2
 	select SYS_HAS_EARLY_PRINTK
