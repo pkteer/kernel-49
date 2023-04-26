@@ -31,13 +31,6 @@
 #include "ralink-flash.h"
 #include "ralink_spi_bbu.h"
 
-static const char *part_probes[] __initconst = {
-#ifdef CONFIG_MTD_NDM_PARTS
-	"ndmpart",
-#endif
-	NULL
-};
-
 /*
  * #define SPI_DEBUG
  * #define TEST_CS1_FLASH
@@ -1182,7 +1175,7 @@ static int __init raspi_init(void)
 #endif
 
 	/* register the partitions */
-	return mtd_device_parse_register(&flash->mtd, part_probes, NULL, NULL, 0);
+	return mtd_device_parse_register(&flash->mtd, NULL, NULL, NULL, 0);
 }
 
 static void __exit raspi_exit(void)
