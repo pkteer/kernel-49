@@ -55,8 +55,12 @@ config NET_MEDIATEK_ESW_RT3050
 config NET_MEDIATEK_GSW_MT7620
 	def_tristate NET_MEDIATEK_SOC
 	depends on NET_MEDIATEK_MT7620
+	select PHYLIB
+	select SWCONFIG
 
 config NET_MEDIATEK_GSW_MT7621
 	def_tristate NET_MEDIATEK_SOC
 	depends on NET_MEDIATEK_MT7621
+	select PHYLIB
+	select SWCONFIG
 endif
