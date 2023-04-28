@@ -93,7 +93,7 @@ int fe_connect_phy_node(struct fe_priv *priv, struct device_node *phy_node)
 
 	dev_info(priv->device,
 		 "connected port %d to PHY at %s [uid=%08x, driver=%s]\n",
-		 port, dev_name(&phydev->dev), phydev->phy_id,
+		 port, dev_name(&phydev->mdio.dev), phydev->phy_id,
 		 phydev->drv->name);
 
 	priv->phy->phy[port] = phydev;
@@ -104,7 +104,7 @@ int fe_connect_phy_node(struct fe_priv *priv, struct device_node *phy_node)
 
 static void phy_init(struct fe_priv *priv, struct phy_device *phy)
 {
-	phy_attach(priv->netdev, dev_name(&phy->dev), PHY_INTERFACE_MODE_MII);
+	phy_attach(priv->netdev, dev_name(&phy->mdio.dev), PHY_INTERFACE_MODE_MII);
 
 	phy->autoneg = AUTONEG_ENABLE;
 	phy->speed = 0;
@@ -125,10 +125,13 @@ static int fe_phy_connect(struct fe_priv *priv)
 				priv->phy_dev = priv->phy->phy[i];
 				priv->phy_flags = FE_PHY_FLAG_PORT;
 			}
-		} else if (priv->mii_bus && priv->mii_bus->phy_map[i]) {
-			phy_init(priv, priv->mii_bus->phy_map[i]);
+		} else if (priv->mii_bus && priv->mii_bus->mdio_map[i]) {
+			struct phy_device *phydev =
+				container_of(priv->mii_bus->mdio_map[i],
+					     struct phy_device, mdio);
+			phy_init(priv, phydev);
 			if (!priv->phy_dev) {
-				priv->phy_dev = priv->mii_bus->phy_map[i];
+				priv->phy_dev = phydev;
 				priv->phy_flags = FE_PHY_FLAG_ATTACH;
 			}
 		}
@@ -151,8 +154,10 @@ static void fe_phy_disconnect(struct fe_priv *priv)
 			spin_unlock_irqrestore(&priv->phy->lock, flags);
 		} else if (priv->phy->phy[i]) {
 			phy_disconnect(priv->phy->phy[i]);
-		} else if (priv->mii_bus && priv->mii_bus->phy_map[i]) {
-			phy_detach(priv->mii_bus->phy_map[i]);
+		} else if (priv->mii_bus && priv->mii_bus->mdio_map[i]) {
+			phy_detach(container_of(
+				priv->mii_bus->mdio_map[i],
+				struct phy_device, mdio));
 		}
 }
 

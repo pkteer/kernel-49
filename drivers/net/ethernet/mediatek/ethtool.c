@@ -49,14 +49,15 @@ static int fe_set_settings(struct net_device *dev,
 	if (!priv->phy_dev)
 		goto out_sset;
 
-	if (cmd->phy_address != priv->phy_dev->addr) {
+	if (cmd->phy_address != priv->phy_dev->mdio.addr) {
 		if (priv->phy->phy_node[cmd->phy_address]) {
 			priv->phy_dev = priv->phy->phy[cmd->phy_address];
 			priv->phy_flags = FE_PHY_FLAG_PORT;
 		} else if (priv->mii_bus &&
-			   priv->mii_bus->phy_map[cmd->phy_address]) {
+			   priv->mii_bus->mdio_map[cmd->phy_address]) {
 			priv->phy_dev =
-				priv->mii_bus->phy_map[cmd->phy_address];
+				container_of(priv->mii_bus->mdio_map[cmd->phy_address],
+					     struct phy_device, mdio);
 			priv->phy_flags = FE_PHY_FLAG_ATTACH;
 		} else {
 			goto out_sset;

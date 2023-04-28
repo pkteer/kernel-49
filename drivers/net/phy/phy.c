@@ -1039,7 +1039,8 @@ void phy_state_machine(struct work_struct *work)
 		/* If the link is down, give up on negotiation for now */
 		if (!phydev->link) {
 			phydev->state = PHY_NOLINK;
-			netif_carrier_off(phydev->attached_dev);
+			if (!phydev->no_auto_carrier_off)
+				netif_carrier_off(phydev->attached_dev);
 			phydev->adjust_link(phydev->attached_dev);
 			break;
 		}
@@ -1131,7 +1132,8 @@ void phy_state_machine(struct work_struct *work)
 			netif_carrier_on(phydev->attached_dev);
 		} else {
 			phydev->state = PHY_NOLINK;
-			netif_carrier_off(phydev->attached_dev);
+			if (!phydev->no_auto_carrier_off)
+				netif_carrier_off(phydev->attached_dev);
 		}
 
 		phydev->adjust_link(phydev->attached_dev);
@@ -1143,7 +1145,8 @@ void phy_state_machine(struct work_struct *work)
 	case PHY_HALTED:
 		if (phydev->link) {
 			phydev->link = 0;
-			netif_carrier_off(phydev->attached_dev);
+			if (!phydev->no_auto_carrier_off)
+				netif_carrier_off(phydev->attached_dev);
 			phydev->adjust_link(phydev->attached_dev);
 			do_suspend = true;
 		}

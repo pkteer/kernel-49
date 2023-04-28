@@ -96,7 +96,7 @@ static int mt7620_gsw_config(struct fe_priv *priv)
 	struct mt7620_gsw *gsw = (struct mt7620_gsw *) priv->soc->swpriv;
 
 	/* is the mt7530 internal or external */
-	if (priv->mii_bus && priv->mii_bus->phy_map[0x1f]) {
+	if (priv->mii_bus && priv->mii_bus->mdio_map[0x1f]) {
 		mt7530_probe(priv->device, gsw->base, NULL, 0);
 		mt7530_probe(priv->device, NULL, priv->mii_bus, 1);
 	} else {
@@ -234,7 +234,7 @@ static void mt7620_port_init(struct fe_priv *priv, struct device_node *np)
 		return;
 	}
 
-	if (priv->phy->phy_node[id] && priv->mii_bus->phy_map[id]) {
+	if (priv->phy->phy_node[id] && priv->mii_bus->mdio_map[id]) {
 		u32 val = PMCR_BACKPRES | PMCR_BACKOFF | PMCR_RX_EN |
 			PMCR_TX_EN |  PMCR_MAC_MODE | PMCR_IPG;
 

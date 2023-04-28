@@ -371,6 +371,7 @@ struct phy_device {
 	bool has_fixups;
 	bool suspended;
 	bool suspended_by_mdio_bus;
+	bool no_auto_carrier_off;
 
 	enum phy_state state;
 

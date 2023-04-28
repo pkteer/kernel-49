@@ -217,6 +217,6 @@ void rt2880_port_init(struct fe_priv *priv, struct device_node *np)
 		return;
 	}
 
-	if (priv->phy->phy_node[0] && priv->mii_bus->phy_map[0])
+	if (priv->phy->phy_node[0] && priv->mii_bus->mdio_map[0])
 		fe_connect_phy_node(priv, priv->phy->phy_node[0]);
 }
