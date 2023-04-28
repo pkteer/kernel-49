@@ -19,7 +19,7 @@
 #include <linux/of_device.h>
 #include <linux/of_irq.h>
 
-#include <ralink_regs.h>
+#include <asm/mach-ralink/ralink_regs.h>
 
 #include "mtk_eth_soc.h"
 #include "gsw_mt7620.h"
