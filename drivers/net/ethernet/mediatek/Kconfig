@@ -6,6 +6,7 @@ config NET_VENDOR_MEDIATEK
 
 config NET_MEDIATEK_SOC
 	def_tristate NET_VENDOR_MEDIATEK
+	select USE_OF
 
 if NET_MEDIATEK_SOC
 choice
